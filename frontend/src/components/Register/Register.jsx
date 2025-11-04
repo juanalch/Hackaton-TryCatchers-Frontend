@@ -27,10 +27,14 @@ function Register() {
     setError('');
     setLoading(true);
 
+    console.log('📤 Enviando datos de registro:', formData);
+
     try {
       // Llamada al endpoint de registro
       const response = await authService.register(formData);
       
+      console.log('✅ Respuesta del servidor:', response.data);
+
       // Si el servidor devuelve un token, guardarlo
       if (response.data.token) {
         authService.setToken(response.data.token);
@@ -39,8 +43,16 @@ function Register() {
       // Redirigir al login o dashboard
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.message || 'Error en el registro');
-      console.error('Error de registro:', err);
+      console.error('❌ Error completo:', err);
+      console.error('❌ Respuesta del servidor:', err.response?.data);
+      console.error('❌ Status:', err.response?.status);
+      
+      const errorMessage = err.response?.data?.message 
+        || err.response?.data?.error 
+        || err.message 
+        || 'Error en el registro';
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,6 +63,9 @@ function Register() {
       <div className="register-card">
         <div className="register-header">
           <h1>Try-Catchers 📊</h1>
+          <p style={{ fontSize: '0.9rem', marginTop: '10px', opacity: 0.9 }}>
+            Backend: http://localhost:8080/api
+          </p>
         </div>
 
         <div className="register-form-wrapper">

@@ -3,22 +3,34 @@ import apiClient from './apiClient';
 const authService = {
   /**
    * Registra un nuevo usuario
-   * Endpoint: POST /autenticacion/register
+   * Endpoint: POST /auth/register
    * @param {Object} userData - Datos del usuario
    * @returns {Promise} Respuesta del servidor
    */
   register: (userData) => {
-    return apiClient.post('/autenticacion/register', userData);
+    // Mapear campos del frontend al formato del backend
+    const backendData = {
+      email: userData.correo,
+      password: userData.contraseña,
+      firstName: userData.nombre,
+      lastName: userData.apellido
+    };
+    return apiClient.post('/auth/register', backendData);
   },
 
   /**
    * Inicia sesión de un usuario
-   * Endpoint: POST /autenticacion/login
+   * Endpoint: POST /auth/login
    * @param {Object} credentials - Credenciales { correo, contraseña }
    * @returns {Promise} Respuesta del servidor con token
    */
   login: (credentials) => {
-    return apiClient.post('/autenticacion/login', credentials);
+    // Mapear campos del frontend al formato del backend
+    const backendData = {
+      email: credentials.correo,
+      password: credentials.contraseña
+    };
+    return apiClient.post('/auth/login', backendData);
   },
 
   /**
